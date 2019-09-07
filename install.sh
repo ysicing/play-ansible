@@ -1,6 +1,6 @@
 #!/bin/bash
 
-curl --fail --silent --location -o /tmp/stdlib.sh https://code.godu.dev/godu/func/raw/master/func.sh || {
+curl --fail --silent --location -o /tmp/stdlib.sh https://raw.githubusercontent.com/ysicing/func/master/func.sh || {
 	exit 1
 }
 

@@ -1,0 +1,105 @@
+- name: Check if bootstrap is needed
+  raw: which python
+  register: need_bootstrap
+  failed_when: false
+  changed_when: false
+  # This command should always run, even in check mode
+  check_mode: false
+  environment: {}
+  tags:
+    - facts
+
+- name: Check http::proxy in /etc/apt/apt.conf
+  raw: grep -qsi 'Acquire::http::proxy' /etc/apt/apt.conf
+  register: need_http_proxy
+  failed_when: false
+  changed_when: false
+  # This command should always run, even in check mode
+  check_mode: false
+  environment: {}
+  when:
+    - http_proxy is defined
+
+- name: Add http_proxy to /etc/apt/apt.conf if http_proxy is defined
+  raw: echo 'Acquire::http::proxy "{{ http_proxy }}";' >> /etc/apt/apt.conf
+  become: true
+  environment: {}
+  when:
+    - http_proxy is defined
+    - need_http_proxy.rc != 0
+
+- name: Check https::proxy in /etc/apt/apt.conf
+  raw: grep -qsi 'Acquire::https::proxy' /etc/apt/apt.conf
+  register: need_https_proxy
+  failed_when: false
+  changed_when: false
+  # This command should always run, even in check mode
+  check_mode: false
+  environment: {}
+  when:
+    - https_proxy is defined
+
+- name: Add https_proxy to /etc/apt/apt.conf if https_proxy is defined
+  raw: echo 'Acquire::https::proxy "{{ https_proxy }}";' >> /etc/apt/apt.conf
+  become: true
+  environment: {}
+  when:
+    - https_proxy is defined
+    - need_https_proxy.rc != 0
+
+- name: Install python
+  raw:
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y python-minimal
+  become: true
+  environment: {}
+  when:
+    - need_bootstrap.rc != 0
+
+# Workaround for https://github.com/ansible/ansible/issues/25543
+- name: Install dbus for the hostname module
+  package:
+    name: dbus
+    state: present
+  become: true
+
+- name: 删除默认安装
+  shell: "apt remove -y {{ item }}"
+  with_items:
+    - ufw
+    - lxd
+    - lxd-client
+    - lxcfs
+    - lxc-common
+  ignore_errors: true
+
+- name: 安装基础软件
+  package: 
+    name:
+      - nfs-common          # 挂载nfs 共享文件需要 (创建基于 nfs的PV 需要)
+      - conntrack           # network connection cleanup 用到
+      - jq                  # 轻量JSON处理程序，安装docker查询镜像需要
+      - socat               # 用于port forwarding
+      - bash-completion     # bash命令补全工具，需要重新登录服务器生效
+      - rsync               # 文件同步工具，分发证书等配置文件需要
+      - ipset
+      - ipvsadm
+      - htop
+      - net-tools
+      - wget 
+      - libseccomp2
+      - psmisc
+    state: present
+
+# 优化设置 journal 日志相关，避免日志重复搜集，浪费系统资源
+- name: 准备 journal 日志相关目录
+  file: name={{ item }} state=directory
+  with_items:
+  - "/etc/systemd/journald.conf.d"
+  - "/var/log/journal"
+
+- name: 优化设置 journal 日志
+  template: src=95-k8s-journald.conf.j2 dest=/etc/systemd/journald.conf.d/95-k8s-journald.conf
+
+- name: 重启 journald 服务
+  service: name=systemd-journald state=restarted

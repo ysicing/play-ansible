@@ -1,0 +1,7 @@
+---
+- name: install docker
+  shell: "curl -fsSL https://raw.githubusercontent.com/ysicing/deploy/master/docker.sh | bash "
+  register: docker_install
+  until: docker_install is succeeded
+  retries: 3
+

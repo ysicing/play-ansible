@@ -1,0 +1,9 @@
+---
+# Install epel repo on Centos/RHEL
+centos_epel_enabled: false
+# Use the fastestmirror yum plugin
+centos_fastestmirror_enabled: false
+
+# proxy
+#http_proxy: "http://172.16.16.55:3142"
+#https_proxy: "http://172.16.16.55:3142"

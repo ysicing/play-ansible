@@ -1,0 +1,18 @@
+---
+- name: install k8s
+  shell: "sealos init --passwd vagrant --podcidr 172.16.0.0/16 --repo registry.cn-hangzhou.aliyuncs.com/google_containers --master  192.168.100.101 --version 1.17.1 --pkg-url https://ysicing.me/hack/vm/kube.tgz"
+  register: k8s_install
+  until: k8s_install is succeeded
+  retries: 3
+
+- name: helm init stable
+  shell: "helm repo add stable http://mirror.azure.cn/kubernetes/charts/"
+  register:  helm_init_stable
+  until: helm_init_stable is succeeded
+  retries: 3
+
+- name: helm init incubator
+  shell: "helm repo add incubator http://mirror.azure.cn/kubernetes/charts-incubator/"
+  register:  helm_init_incubator
+  until: helm_init_incubator is succeeded
+  retries: 3

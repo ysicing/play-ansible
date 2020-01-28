@@ -1,6 +1,6 @@
 #!/bin/bash
 
-curl --fail --silent --location -o /tmp/stdlib.sh https://raw.githubusercontent.com/ysicing/func/master/func.sh || {
+curl --fail --silent --location -o /tmp/stdlib.sh https://ysicing.me/hack/help/func.sh || {
 	exit 1
 }
 

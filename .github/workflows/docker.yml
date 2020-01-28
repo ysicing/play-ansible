@@ -13,8 +13,8 @@ jobs:
       run: |
           echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
           set -x
-          docker build -t ysicing/ansible .
-          docker push ysicing/ansible
+          docker build -t ysicing/ansible:allinone .
+          docker push ysicing/ansible:allinone
           docker logout
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

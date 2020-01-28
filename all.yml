@@ -3,3 +3,4 @@
   roles:
     - prepare
     - docker
+    - k8s

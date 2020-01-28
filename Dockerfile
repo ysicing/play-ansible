@@ -11,3 +11,5 @@ RUN set -x \
 COPY . /etc/ansible
 
 WORKDIR /etc/ansible
+
+CMD [ "ansible-playbook", "all.yml" ]

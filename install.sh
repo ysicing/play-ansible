@@ -16,4 +16,4 @@ ln -s /usr/local/bin/pip /usr/bin/pip
 
 run pip install -U pip
 
-run pip install ansible
+run pip install ansible -i https://pypi.tuna.tsinghua.edu.cn/simple

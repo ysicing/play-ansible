@@ -91,6 +91,7 @@
       - psmisc
       - git
       - curl
+      - nload
     state: present
 
 # 优化设置 journal 日志相关，避免日志重复搜集，浪费系统资源

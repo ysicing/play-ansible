@@ -11,3 +11,7 @@ RUN set -x \
 COPY . /etc/ansible
 
 WORKDIR /etc/ansible
+
+RUN chmod +x /etc/ansible/deploy.sh
+
+ENTRYPOINT [ "/etc/ansible/deploy.sh" ]

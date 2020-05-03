@@ -24,7 +24,7 @@ cp inventory.ini.example inventory.ini
 # 编辑inventory.ini,添加节点ip
 
 # 执行初始化
-ansible-playbook init.yml
+ansible-playbook init.yaml
 ```
 
 ## roles

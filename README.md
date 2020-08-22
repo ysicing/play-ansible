@@ -18,8 +18,8 @@ ansible-playbook init.yml
 ## docker
 
 ```
-docker pull ysicing/ansible
-docker run -it --rm ysicing/ansible bash
+docker pull ysicing/ansible:1.0
+docker run -it --rm ysicing/ansible:1.0 bash
 cp inventory.ini.example inventory.ini
 # 编辑inventory.ini,添加节点ip
 

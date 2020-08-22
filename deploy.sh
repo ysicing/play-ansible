@@ -6,7 +6,7 @@ if [ "$1" == "bash" ]; then
     exec /bin/bash
 fi
 
-IP=${IP:-192.168.100.101}
+IP=${IP:-11.11.11.11}
 PORT=${PORT:-22}
 USER=${USER:-root}
 PASS=${PASS:-vagrant}

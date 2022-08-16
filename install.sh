@@ -1,7 +1,9 @@
 #!/bin/bash
 
-curl --fail --silent --location -o /tmp/stdlib.sh https://ysicing.me/hack/help/func.sh || {
-	exit 1
+set -e
+
+curl --fail --silent --location -o /tmp/stdlib.sh https://sh.ysicing.me/help/func.sh || {
+	curl --fail --silent --location -o /tmp/stdlib.sh https://raw.githubusercontent.com/ysicing/devops-handbook/master/hack/help/func.sh
 }
 
 source /tmp/stdlib.sh
